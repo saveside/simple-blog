@@ -1,0 +1,282 @@
+:root {
+    --bg: #111;
+    --text: #ddd;
+    --accent: #fff;
+    --code-bg: #222;
+    --border: #333;
+    --font-header: "Archivo", sans-serif;
+    --font-body: "Noto Sans", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+}
+
+body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+    max-width: 1200px; /* Increased max-width */
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-header);
+    line-height: 1.2;
+    margin-top: 2rem;
+    color: #fff;
+}
+
+.container {
+    display: flex;
+    gap: 4rem; /* Increased gap */
+    align-items: flex-start; /* Align items to top */
+}
+
+main {
+    flex: 3;
+    min-width: 0; /* Prevents flex child from overflowing */
+}
+
+/* Sidebar */
+.sidebar {
+    flex: 0 0 280px; /* Fixed width sidebar, doesn't grow or shrink */
+    border-right: 1px solid var(--border);
+    padding-right: 2rem;
+    
+    /* Make sidebar sticky */
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: var(--accent);
+}
+
+.notes-tree {
+    list-style: none;
+    padding-left: 0;
+}
+
+.notes-tree ul {
+    list-style: none;
+    padding-left: 1.2rem;
+    margin-top: 0.2rem;
+    border-left: 1px dashed var(--border); /* Dashed line for tree view */
+}
+
+.notes-tree li {
+    margin: 0.3rem 0;
+}
+
+/* TUI Icons */
+.tui-icon {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: text-bottom;
+    margin-right: 0.3rem;
+    fill: #fff; /* Pure white fill for SVG */
+    color: #fff;
+}
+
+/* Details/Summary for collapsible folders */
+details > summary {
+    list-style: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #bbb; /* Slightly lighter folder text */
+    user-select: none;
+}
+
+details > summary:hover {
+    color: var(--accent);
+}
+
+/* Custom arrow for details */
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+details > summary::before {
+    content: '▶';
+    font-size: 0.7em;
+    display: inline-block;
+    margin-right: 0.4rem;
+    transition: transform 0.2s;
+    opacity: 0.5;
+}
+
+details[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+.notes-tree a {
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.notes-tree a:hover {
+    color: var(--bg);
+    background: var(--text);
+    text-decoration: none;
+}
+
+/* Media query for mobile */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding-right: 0;
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+        flex: auto;
+        width: 100%;
+        position: static;
+        max-height: none;
+    }
+}
+
+header { 
+    margin-bottom: 3rem; 
+    border-bottom: 1px solid var(--border); 
+    padding-bottom: 1rem; 
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-left h1 {
+    margin-top: 0; /* Remove top margin from h1 in header */
+    margin-bottom: 0.5rem;
+}
+
+.header-left p {
+    margin: 0;
+    color: #888;
+}
+
+/* Search */
+.search-container {
+    position: relative;
+    width: 300px; /* Fixed width for nav search */
+}
+
+#search-input {
+    width: 100%;
+    padding: 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-body);
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-top: none;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+.search-result-item {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item a {
+    display: block;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.search-result-item a:hover {
+    text-decoration: underline;
+}
+
+.search-result-item .meta {
+    font-size: 0.8rem;
+    display: block;
+}
+
+a { color: var(--text); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+a:hover { background: var(--text); color: var(--bg); text-decoration: none; }
+
+.meta { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
+.post-full .meta { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.tag { border: 1px solid var(--border); padding: 0.2rem 0.5rem; margin-right: 0.5rem; color: #aaa; cursor: pointer; }
+.tag:hover { color: var(--accent); border-color: var(--accent); }
+
+.highlighted-list {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.highlighted-list li {
+    margin-bottom: 0.5rem;
+}
+
+.highlighted-list a {
+    color: var(--accent);
+    text-decoration: underline; /* Added underline back */
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    font-size: 1rem;
+}
+
+.highlighted-list a:hover {
+    text-decoration: none; /* Remove underline on hover for consistent style */
+    background: var(--text); 
+    color: var(--bg);
+}
+
+/* Markdown Content */
+.content pre { 
+    background: var(--code-bg) !important; 
+    padding: 1rem; 
+    overflow-x: auto; 
+    border: 1px solid var(--border);
+}
+.content code { 
+    font-family: var(--font-mono); 
+    font-size: 0.9em; 
+}
+.content img { max-width: 100%; height: auto; border: 1px solid var(--border); }
+.content blockquote { 
+    border-left: 4px solid var(--border); 
+    margin: 0; 
+    padding-left: 1rem; 
+    color: #888; 
+}
+
+footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: #666; }

@@ -1,0 +1,28 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>{{ .Site.BaseURL }}</loc>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>{{ .Site.BaseURL }}notes.html</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    {{ range .Posts }}
+    <url>
+        <loc>{{ .URL }}</loc>
+        <lastmod>{{ .Date.Format "2006-01-02" }}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    {{ end }}
+    {{ range .Notes }}
+    <url>
+        <loc>{{ .URL }}</loc>
+        <lastmod>{{ .Date.Format "2006-01-02" }}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    {{ end }}
+</urlset>

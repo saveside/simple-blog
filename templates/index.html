@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Site.Title }}</title>
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="{{ .Site.Title }}">
+    <meta property="og:description" content="{{ .Site.Description }}">
+    <meta property="og:image" content="{{ .Site.BaseURL }}assets/banner.png">
+    <meta property="og:url" content="{{ .Site.BaseURL }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ .Site.Title }}">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ .Site.Title }}">
+    <meta name="twitter:description" content="{{ .Site.Description }}">
+    <meta name="twitter:image" content="{{ .Site.BaseURL }}assets/banner.png">
+
+    <link rel="icon" type="image/png" href="{{ .Site.BaseURL }}assets/favicon.png">
+    <link rel="canonical" href="{{ .Site.BaseURL }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=JetBrains+Mono&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ .Site.BaseURL }}static/style.css">
+    <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} RSS Feed" href="{{ .Site.BaseURL }}rss.xml" />
+    <script src="{{ .Site.BaseURL }}static/search.js" defer></script>
+    {{ if .Site.UmamiID }}<script defer src="{{ if .Site.UmamiURL }}{{ .Site.UmamiURL }}/script.js{{ else }}https://cloud.umami.is/script.js{{ end }}" data-website-id="{{ .Site.UmamiID }}"></script>{{ end }}
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+            <p>{{ .Site.Description }}</p>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search..." aria-label="Search">
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Notes</h3>
+            <ul class="notes-tree">
+                {{ template "node" .Site.NotesTree }}
+            </ul>
+        </aside>
+
+        <main>
+            <div class="homepage-intro">
+                <div class="bio">
+                    {{ .Site.HomeContent }}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 {{ .Site.Title }}</p>
+    </footer>
+
+    {{ define "node" }}
+        {{ range . }}
+            <li>
+                {{ if .IsDir }}
+                    <details open>
+                        <summary>
+                            {{ .Name }}
+                        </summary>
+                        <ul>
+                            {{ template "node" .Children }}
+                        </ul>
+                    </details>
+                {{ else }}
+                    <a href="{{ .URL }}">
+                        {{ .Title }}
+                    </a>
+                {{ end }}
+            </li>
+        {{ end }}
+    {{ end }}
+</body>
+</html>
