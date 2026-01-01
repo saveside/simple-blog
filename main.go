@@ -62,7 +62,8 @@ func (r *HeadingRenderer) renderHeading(w util.BufWriter, source []byte, node as
 				id = v
 			}
 
-			if id != "" {
+			// Add copy button only for H2 and H3, and only if ID exists
+			if id != "" && (n.Level == 2 || n.Level == 3) {
 				link := "#" + id
 				btnHTML := fmt.Sprintf(` <button class="copy-link-btn" aria-label="Copy link to this section" onclick="copyToClipboard('%s', this)"><i class="fa-solid fa-link"></i></button>`, link)
 				_, _ = w.WriteString(btnHTML)
