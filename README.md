@@ -1,6 +1,6 @@
-# Digital Garden SSG
+# simple-blog
 
-A custom Static Site Generator (SSG) written in Go, designed for a "Digital Garden" blog. It features a minimalist, split-pane layout with a Text User Interface (TUI) aesthetic, monospaced fonts, and high-contrast visuals.
+A custom Static Blog Generator written in Go, designed for a "Digital Garden" blog. It features a minimalist, split-pane layout with a Text User Interface (TUI) aesthetic, monospaced fonts, and high-contrast visuals.
 
 ## Features
 
