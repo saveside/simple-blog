@@ -26,6 +26,17 @@
     <link rel="stylesheet" href="{{ .Site.BaseURL }}static/style.css">
     <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} RSS Feed" href="{{ .Site.BaseURL }}rss.xml" />
     <script src="{{ .Site.BaseURL }}static/search.js" defer></script>
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-link-btn');
+                btn.classList.add('copied');
+                setTimeout(() => btn.classList.remove('copied'), 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
     {{ if .Site.UmamiID }}<script defer src="{{ if .Site.UmamiURL }}{{ .Site.UmamiURL }}/script.js{{ else }}https://cloud.umami.is/script.js{{ end }}" data-website-id="{{ .Site.UmamiID }}"></script>{{ end }}
 </head>
 <body>
@@ -50,7 +61,12 @@
         <main>
             <article class="post-full">
                 <header>
-                    <h1>{{ .Post.Title }}</h1>
+                    <h1 class="post-title">
+                        {{ .Post.Title }}
+                        <button class="copy-link-btn" aria-label="Copy link to this note" onclick="copyToClipboard('{{ .Post.URL }}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                        </button>
+                    </h1>
                     <div class="meta">
                         <time>{{ .Post.Date.Format "Jan 02, 2006" }}</time>
                         {{ if .Post.Tags }}

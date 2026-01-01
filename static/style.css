@@ -280,3 +280,34 @@ a:hover { background: var(--text); color: var(--bg); text-decoration: none; }
 }
 
 footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: #666; }
+
+/* Copy Link Button */
+.post-title {
+    position: relative;
+    display: inline-block;
+}
+
+.copy-link-btn {
+    opacity: 0;
+    transition: opacity 0.2s, background-color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    padding: 0.2rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+.post-title:hover .copy-link-btn,
+.copy-link-btn:focus {
+    opacity: 1;
+}
+
+.copy-link-btn:hover {
+    color: var(--accent);
+}
+
+.copy-link-btn.copied {
+    color: #4caf50; /* Green success color */
+}
