@@ -16,10 +16,65 @@ import (
 	chroma "github.com/alecthomas/chroma/v2/formatters/html"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
+	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/util"
 )
+
+type HeadingRenderer struct {
+	html.Config
+}
+
+func NewHeadingRenderer(opts ...html.Option) renderer.NodeRenderer {
+	r := &HeadingRenderer{
+		Config: html.NewConfig(),
+	}
+	for _, opt := range opts {
+		opt.SetHTMLOption(&r.Config)
+	}
+	return r
+}
+
+func (r *HeadingRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+	reg.Register(ast.KindHeading, r.renderHeading)
+}
+
+func (r *HeadingRenderer) renderHeading(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	n := node.(*ast.Heading)
+	if entering {
+		_, _ = w.WriteString("<h")
+		_ = w.WriteByte("0123456"[n.Level])
+		if n.Attributes() != nil {
+			html.RenderAttributes(w, n, html.HeadingAttributeFilter)
+		}
+		_ = w.WriteByte('>')
+	} else {
+		// Get the ID to link to
+		if idAttr, ok := n.Attribute([]byte("id")); ok {
+			var id string
+			switch v := idAttr.(type) {
+			case []byte:
+				id = string(v)
+			case string:
+				id = v
+			}
+
+			if id != "" {
+				link := "#" + id
+				btnHTML := fmt.Sprintf(` <button class="copy-link-btn" aria-label="Copy link to this section" onclick="copyToClipboard('%s', this)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>`, link)
+				_, _ = w.WriteString(btnHTML)
+			}
+		}
+
+		_, _ = w.WriteString("</h")
+		_ = w.WriteByte("0123456"[n.Level])
+		_ = w.WriteByte('>')
+	}
+	return ast.WalkContinue, nil
+}
 
 type Config struct {
 	Title       string `json:"title"`
@@ -195,6 +250,9 @@ func main() {
 		goldmark.WithRendererOptions(
 			html.WithHardWraps(),
 			html.WithXHTML(),
+			renderer.WithNodeRenderers(
+				util.Prioritized(NewHeadingRenderer(), 1000),
+			),
 		),
 	)
 

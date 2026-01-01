@@ -282,7 +282,7 @@ a:hover { background: var(--text); color: var(--bg); text-decoration: none; }
 footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: #666; }
 
 /* Copy Link Button */
-.post-title {
+.post-title, .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
     position: relative;
     display: inline-block;
 }
@@ -300,6 +300,12 @@ footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border
 }
 
 .post-title:hover .copy-link-btn,
+.content h1:hover .copy-link-btn,
+.content h2:hover .copy-link-btn,
+.content h3:hover .copy-link-btn,
+.content h4:hover .copy-link-btn,
+.content h5:hover .copy-link-btn,
+.content h6:hover .copy-link-btn,
 .copy-link-btn:focus {
     opacity: 1;
 }
